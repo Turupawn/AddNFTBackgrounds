@@ -15,29 +15,45 @@ const { Image, Canvas } = require('canvas');
 const ImageDataURI = require('image-data-uri');
 
 
-async function itsMyGeneration() {
-  let no_background_path = "./no_background/"
-  let backgrounds_path = "./backgrounds/"
-  var backgrounds = []
-  var backgrounds_amount = [2,2,0,0,1]
+let backgrounds_path = "./backgrounds/"
+let no_background_path = "./images/"
+let metadata_path = "./metadata/"
+var backgrounds = []
+// Edit rarities here:
+var backgrounds_amount = [5,5,5,5]
+
+async function addBackgounds() {
+  fs.mkdirSync("./output/metadata/", { recursive: true })
   fs.readdirSync(backgrounds_path).forEach(file => {
     backgrounds.push(file)
     console.log(file)
   });
-  fs.readdirSync(no_background_path).forEach(file => {
+  fs.readdirSync(metadata_path).forEach(file => {
     console.log(file);
     var background_index
     do {
       background_index = [Math.floor(Math.random()*backgrounds.length)]
     } while (backgrounds_amount[background_index] <= 0)
     backgrounds_amount[background_index] -= 1
-    leMerge(backgrounds_path + backgrounds[background_index], no_background_path + file, "./output/" + file)
+    mergeImage(backgrounds_path + backgrounds[background_index], no_background_path + file + ".png", "./output/" + file)
+    mergeJSON(background_index, file)
   });
 }
 
-async function leMerge(a, b, result) {
+async function mergeImage(a, b, result) {
   const b64 = await mergeImages([a, b], { Canvas: Canvas, Image: Image });
   await ImageDataURI.outputFile(b64, result);
 }
 
-itsMyGeneration()
+async function mergeJSON(background_index, file) {
+  try {
+    const data = await readFile(metadata_path + file)
+    var original_metadata = JSON.parse(data.toString())
+    console.log(backgrounds[background_index].replace(/\.[^/.]+$/, ""))
+    var background_name = backgrounds[background_index].replace(/\.[^/.]+$/, "")
+    original_metadata["attributes"].unshift({background: background_name})
+    await writeFile("./output/metadata/"+file, JSON.stringify(original_metadata))
+  } catch (error) {}
+}
+
+addBackgounds()
