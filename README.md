@@ -1,14 +1,14 @@
-# Add NFT Background 
+# Add NFT Background
 
 This project is inteded as an addon to the [NFT Art Generator](https://github.com/FilosofiaCodigo/nft-art-generator). Solves the problem of having backgound images counted as unique traits.
 
-## Dependencies
+## Dependencies ⚒
 
 ```
 npm install
 ```
 
-## Usage
+## Usage 📝
 
 1. Place NFT images without background in `./images/`
 2. Place NFT metadata corresponding to images in `./metadata/`
