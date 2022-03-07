@@ -1,4 +1,4 @@
-# Add NFT Background
+# Add NFT Backgrounds
 
 This project is inteded as an addon to the [NFT Art Generator](https://github.com/FilosofiaCodigo/nft-art-generator). Solves the problem of having backgound images counted as unique traits.
 
